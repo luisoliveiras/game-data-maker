@@ -1,3 +1,17 @@
-﻿{
-	"name": "devludico.GameDataMaker.Editor"
+{
+    "name": "devludico.GameDataMaker.Editor",
+    "references": [
+        "GUID:20ee4a3842a0b0e439c9f0103cf6d475"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
