@@ -6,28 +6,33 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Save Manager Config", fileName ="SaveConfig")]
 public class GameDataConfig : ScriptableObject
 {
-    [HideInInspector] [SerializeField] private string _folder;
-    [HideInInspector] [SerializeField] private string _fileName;
-    [HideInInspector] [SerializeField] private string _extension;
+    [SerializeField] private List<GameDataItem> _saveItems;
 
-    public string Folder { get => _folder; }
-    public string FileName { get => _fileName; }
-    public string Extension { get => _extension; }
+    public List<GameDataItem> GameDataItems { get => _saveItems; }
 
-    public string FilePath
+    public string GetDataItemPath(string item)
     {
-        get
+        GameDataItem gameDataItem = _saveItems.Find(p => p.name == item);
+        return gameDataItem.path.ToString();
+    }
+
+    public string GetDataItemFolderPath(string item)
+    {
+        GameDataItem gameDataItem = _saveItems.Find(p => p.name == item);
+        if (string.IsNullOrEmpty(gameDataItem.path.folder))
         {
-            string fullFileName = string.Concat(_fileName, ".", _extension);
-            string fullPath = Path.Combine(Application.persistentDataPath, _folder, fullFileName);
-            return fullPath;
+            return "";
+        }
+        else
+        {
+            return Path.Combine(Application.persistentDataPath, gameDataItem.path.folder);
         }
     }
+}
 
-    public void Setup(string folder,string fileName, string extension)
-    {
-        _folder = folder;
-        _fileName = fileName;
-        _extension = extension;
-    }
+[System.Serializable]
+public struct GameDataItem
+{
+    public string name;
+    public CustomPath path;
 }

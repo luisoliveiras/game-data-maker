@@ -16,12 +16,17 @@ public static class GameDataMaker
     public static Action OnDeleteSuccess;
     public static Action OnDeleteFail;
 
-    public static string SavePath { get => config.FilePath; }
+    //public static string SavePath { get => config.FilePath; }
 
-    public static void Save<T>(T data) where T: class
+    public static void Save<T>(T data, string item) where T: class
     {
         GetConfig();
-        string path = config.FilePath;
+        string path = config.GetDataItemPath(item);
+        string folderPath = config.GetDataItemFolderPath(item);
+        if (!string.IsNullOrEmpty(folderPath))
+        {
+            Directory.CreateDirectory(folderPath);
+        }
 
         BinaryFormatter binaryFormatter = new BinaryFormatter();
         FileStream stream = new FileStream(path, FileMode.Create);
@@ -32,10 +37,10 @@ public static class GameDataMaker
         OnSaveSuccess?.Invoke();
     }
 
-    public static T Load<T>() where T: class
+    public static T Load<T>(string item) where T: class
     {
         GetConfig();
-        string path = config.FilePath;
+        string path = config.GetDataItemPath(item);
 
         T data;
         if (File.Exists(path))
@@ -61,9 +66,9 @@ public static class GameDataMaker
         return data;
     }
 
-    public static void DeleteSave()
+    public static void DeleteSave(string item)
     {
-        string path = config.FilePath;
+        string path = config.GetDataItemPath(item);
         if (File.Exists(path))
         {
             File.Delete(path);
@@ -75,6 +80,12 @@ public static class GameDataMaker
             Debug.Log($"[GameDataMaker] No save file found at {path}");
             OnDeleteFail?.Invoke();
         }
+    }
+
+    public static bool SaveExists(string item)
+    {
+        string path = config.GetDataItemPath(item);
+        return File.Exists(path);
     }
 
     private static void GetConfig()
