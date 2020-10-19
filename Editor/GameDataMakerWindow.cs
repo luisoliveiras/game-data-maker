@@ -16,6 +16,10 @@ public class GameDataMakerWindow : EditorWindow
         if (config == null)
         {
             config = CreateInstance<GameDataConfig>();
+            if (!AssetDatabase.IsValidFolder("Assets/Resources"))
+            {
+                AssetDatabase.CreateFolder("Assets", "Resources");
+            }
             AssetDatabase.CreateAsset(config, "Assets/Resources/SaveConfig.asset");
         }
         _serializedObject = new SerializedObject(config);
