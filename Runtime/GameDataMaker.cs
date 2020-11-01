@@ -16,8 +16,6 @@ public static class GameDataMaker
     public static Action OnDeleteSuccess;
     public static Action OnDeleteFail;
 
-    //public static string SavePath { get => config.FilePath; }
-
     public static void Save<T>(T data, string item) where T: class
     {
         GetConfig();

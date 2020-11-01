@@ -6,19 +6,19 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Save Manager Config", fileName ="SaveConfig")]
 public class GameDataConfig : ScriptableObject
 {
-    [SerializeField] private List<GameDataItem> _saveItems;
+    [SerializeField] private List<GameDataItem> _gameDataItems;
 
-    public List<GameDataItem> GameDataItems { get => _saveItems; }
+    public List<GameDataItem> GameDataItems { get => _gameDataItems; }
 
     public string GetDataItemPath(string item)
     {
-        GameDataItem gameDataItem = _saveItems.Find(p => p.name == item);
+        GameDataItem gameDataItem = _gameDataItems.Find(p => p.name == item);
         return gameDataItem.path.ToString();
     }
 
     public string GetDataItemFolderPath(string item)
     {
-        GameDataItem gameDataItem = _saveItems.Find(p => p.name == item);
+        GameDataItem gameDataItem = _gameDataItems.Find(p => p.name == item);
         if (string.IsNullOrEmpty(gameDataItem.path.folder))
         {
             return "";

@@ -32,7 +32,7 @@ public class GameDataMakerWindow : EditorWindow
         EditorGUILayout.Space();
 
         _serializedObject.Update();
-        EditorGUILayout.PropertyField(_serializedObject.FindProperty("_saveItems"),true);
+        EditorGUILayout.PropertyField(_serializedObject.FindProperty("_gameDataItems"),true);
         _serializedObject.ApplyModifiedProperties();
 
         EditorGUILayout.Space();
