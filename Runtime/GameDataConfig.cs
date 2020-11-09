@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace devludico.GameDataMaker
+namespace loophouse.GameDataMaker
 {
     [CreateAssetMenu(menuName = "Save Manager Config", fileName = "SaveConfig")]
     public class GameDataConfig : ScriptableObject

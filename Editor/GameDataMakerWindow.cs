@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace devludico.GameDataMaker
+namespace loophouse.GameDataMaker
 {
     public class GameDataMakerWindow : EditorWindow
     {
@@ -25,6 +25,7 @@ namespace devludico.GameDataMaker
 
             _serializedObject.Update();
             EditorGUILayout.PropertyField(_serializedObject.FindProperty("_showLogs"), true);
+            EditorGUILayout.Space();
             EditorGUILayout.PropertyField(_serializedObject.FindProperty("_gameDataItems"), true);
             _serializedObject.ApplyModifiedProperties();
 

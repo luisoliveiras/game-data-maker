@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-namespace devludico.GameDataMaker
+namespace loophouse.GameDataMaker
 {
     [System.Serializable]
     public struct CustomPath

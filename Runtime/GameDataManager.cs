@@ -5,7 +5,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
-namespace devludico.GameDataMaker
+namespace loophouse.GameDataMaker
 {
     public static class GameDataManager
     {

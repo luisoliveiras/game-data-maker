@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEditor.Experimental.TerrainAPI;
 
-namespace devludico.GameDataMaker
+namespace loophouse.GameDataMaker
 {
     [CustomEditor(typeof(GameDataConfig))]
     public class GameDataConfigEditor : Editor
