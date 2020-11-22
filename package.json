@@ -18,5 +18,10 @@
     "url": "https://github.com/luisoliveiras"
   },
   "samples":[
+    {
+     "displayName": "Example 01",
+     "description": "Simple example of save, load and delete",
+     "path": "Samples~/Example01"
+	}
   ]
 }

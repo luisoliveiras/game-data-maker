@@ -9,7 +9,7 @@ namespace loophouse.GameDataMaker
 {
     public static class GameDataManager
     {
-        private const string TAG = "[GameDataMaker] ";
+        private const string TAG = "[GameDataMaker]";
         private static GameDataConfig config;
 
         public static Action OnSaveSuccess;
@@ -32,10 +32,21 @@ namespace loophouse.GameDataMaker
             BinaryFormatter binaryFormatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Create);
 
-            binaryFormatter.Serialize(stream, data);
+            try
+            {
+                binaryFormatter.Serialize(stream, data);
+                Log($"{typeof(T)} successfully saved: \n Path: {path}");
+                OnSaveSuccess?.Invoke();
+            }
+            catch (Exception e)
+            {
+                LogError($"Unable to save {typeof(T)} : \n {e.Message} ");
+                OnSaveFail?.Invoke();
+            }
+
             stream.Close();
-            Log($"[GameDataMaker] {typeof(T)} successfully saved at {path}");
-            OnSaveSuccess?.Invoke();
+
+            
         }
 
         public static T Load<T>(string item) where T : class
@@ -48,16 +59,26 @@ namespace loophouse.GameDataMaker
             {
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
                 FileStream stream = new FileStream(path, FileMode.Open);
-
-                data = binaryFormatter.Deserialize(stream) as T;
+                try
+                {
+                    data = binaryFormatter.Deserialize(stream) as T;
+                    Log($"Save file {item} retrieved from given path. \n Path: {path}");
+                    OnLoadSuccess?.Invoke();
+                }
+                catch (Exception e)
+                {
+                    LogError($"Failed to load file {item}: \n {e.Message}");
+                    OnLoadFail?.Invoke();
+                    data = null;
+                }
+                
                 stream.Close();
-                Log($"Save file retrieved from {path}");
-                OnLoadSuccess?.Invoke();
+                
             }
             else
             {
                 data = null;
-                Log($"No save file found at {path}");
+                LogError($"No {item} save file found at given path. \n Path: {path}");
                 OnLoadFail?.Invoke();
             }
 
@@ -70,12 +91,12 @@ namespace loophouse.GameDataMaker
             if (File.Exists(path))
             {
                 File.Delete(path);
-                Log($"Save file deleted from {path}");
+                Log($"Save file {item} deleted from given path. \n Path: {path}");
                 OnDeleteSuccess?.Invoke();
             }
             else
             {
-                Log($"No save file found at {path}");
+                LogError($"No {item} save file found at given path. \n Path: {path}");
                 OnDeleteFail?.Invoke();
             }
         }
@@ -99,7 +120,15 @@ namespace loophouse.GameDataMaker
         {
             if (config.ShowLogs)
             {
-                Debug.Log(string.Concat(TAG,message));
+                Debug.Log(string.Concat(TAG," ",message));
+            }
+        }
+
+        private static void LogError(string message)
+        {
+            if (config.ShowLogs)
+            {
+                Debug.LogError(string.Concat(TAG," ", message));
             }
         }
     }
