@@ -3,31 +3,41 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Save Manager Config", fileName ="SaveConfig")]
-public class GameDataConfig : ScriptableObject
+namespace loophouse.GameDataMaker
 {
-    [HideInInspector] [SerializeField] private string _folder;
-    [HideInInspector] [SerializeField] private string _fileName;
-    [HideInInspector] [SerializeField] private string _extension;
-
-    public string Folder { get => _folder; }
-    public string FileName { get => _fileName; }
-    public string Extension { get => _extension; }
-
-    public string FilePath
+    [CreateAssetMenu(menuName = "Save Manager Config", fileName = "SaveConfig")]
+    public class GameDataConfig : ScriptableObject
     {
-        get
+        [SerializeField] private List<GameDataItem> _gameDataItems;
+        [SerializeField] private bool _showLogs;
+
+        public List<GameDataItem> GameDataItems { get => _gameDataItems; }
+        public bool ShowLogs { get => _showLogs; }
+
+        public string GetDataItemPath(string item)
         {
-            string fullFileName = string.Concat(_fileName, ".", _extension);
-            string fullPath = Path.Combine(Application.persistentDataPath, _folder, fullFileName);
-            return fullPath;
+            GameDataItem gameDataItem = _gameDataItems.Find(p => p.name == item);
+            return gameDataItem.path.ToString();
+        }
+
+        public string GetDataItemFolderPath(string item)
+        {
+            GameDataItem gameDataItem = _gameDataItems.Find(p => p.name == item);
+            if (string.IsNullOrEmpty(gameDataItem.path.folder))
+            {
+                return "";
+            }
+            else
+            {
+                return Path.Combine(Application.persistentDataPath, gameDataItem.path.folder);
+            }
         }
     }
 
-    public void Setup(string folder,string fileName, string extension)
+    [System.Serializable]
+    public struct GameDataItem
     {
-        _folder = folder;
-        _fileName = fileName;
-        _extension = extension;
+        public string name;
+        public CustomPath path;
     }
 }

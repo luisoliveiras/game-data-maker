@@ -1,5 +1,5 @@
 {
-  "name": "com.devludico.game-data-maker",
+  "name": "com.loophouse.game-data-maker",
   "version": "0.1.0",
   "displayName": "Game Data Maker",
   "description": "Simple implementation for game data saving and loading",
@@ -18,5 +18,10 @@
     "url": "https://github.com/luisoliveiras"
   },
   "samples":[
+    {
+     "displayName": "Example 01",
+     "description": "Simple example of save, load and delete",
+     "path": "Samples~/Example01"
+	}
   ]
 }

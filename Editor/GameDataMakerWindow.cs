@@ -4,46 +4,58 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameDataMakerWindow : EditorWindow
+namespace loophouse.GameDataMaker
 {
-    static GameDataConfig config;
-
-    string _folder;
-    string _fileName;
-    string _extension;
-
-
-    [MenuItem("Tools/Game Data Maker")]
-    public static void StartWindow()
+    public class GameDataMakerWindow : EditorWindow
     {
-        config = Resources.Load("SaveConfig") as GameDataConfig;
-        if (config == null)
+        static GameDataConfig _config;
+        static SerializedObject _serializedObject;
+
+        [MenuItem("Tools/Game Data Maker")]
+        public static void StartWindow()
         {
-            config = CreateInstance<GameDataConfig>();
-            AssetDatabase.CreateAsset(config, "Assets/Resources/SaveConfig.asset");
+            LoadConfig();
+            GetWindow<GameDataMakerWindow>(false, "Game Data Maker");
         }
 
-        GameDataMakerWindow window = GetWindow<GameDataMakerWindow>(false, "Game Data Maker");
-        window._folder = config.Folder;
-        window._fileName = config.FileName;
-        window._extension = config.Extension;
-    }
-
-    private void OnGUI()
-    {
-        EditorGUILayout.LabelField("Save Options");
-        EditorGUILayout.Space();
-        _folder = EditorGUILayout.TextField("Folder", _folder);
-        _fileName = EditorGUILayout.TextField("File Name", _fileName);
-        _extension = EditorGUILayout.TextField("Extension", _extension);
-
-
-        EditorGUILayout.Space();
-        if (GUILayout.Button("Save"))
+        private void OnGUI()
         {
-            config.Setup(_folder, _fileName, _extension);
-            Selection.activeObject = config;
-            AssetDatabase.SaveAssets();
+            EditorGUILayout.LabelField("Save Options");
+            EditorGUILayout.Space();
+
+            _serializedObject.Update();
+            EditorGUILayout.PropertyField(_serializedObject.FindProperty("_showLogs"), true);
+            EditorGUILayout.Space();
+            EditorGUILayout.PropertyField(_serializedObject.FindProperty("_gameDataItems"), true);
+            _serializedObject.ApplyModifiedProperties();
+
+            EditorGUILayout.Space();
+            if (GUILayout.Button("Save Config"))
+            {
+                Selection.activeObject = _config;
+                AssetDatabase.SaveAssets();
+            }
+        }
+
+        private void OnEnable()
+        {
+            LoadConfig();
+            Repaint();
+        }
+
+        private static void LoadConfig()
+        {
+            _config = Resources.Load("SaveConfig") as GameDataConfig;
+            if (_config == null)
+            {
+                _config = CreateInstance<GameDataConfig>();
+                if (!AssetDatabase.IsValidFolder("Assets/Resources"))
+                {
+                    AssetDatabase.CreateFolder("Assets", "Resources");
+                }
+                AssetDatabase.CreateAsset(_config, "Assets/Resources/SaveConfig.asset");
+            }
+            _serializedObject = new SerializedObject(_config);
         }
     }
 }
